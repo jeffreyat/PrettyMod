@@ -52,14 +52,17 @@ pretty_mod = function(mod,
                       digits = 2,
                       flex_caption = NULL) {
 
-  if(type == 'binomial') {
+  if(type == 'binomial' || type == 'negbin') {
+    # Depending on model type, set effect label
+    effect_lab = ifelse(type == 'binomial', 'OR', 'DeltaCount')
+
     # Put coefficients from model in data.frame
     mod_res = data.frame(summary(mod)$coefficients)
 
     # We just need the estimate of the effect and the p-value for each
     # variable, ditching the intercept
     mod_res = mod_res[-1,c(1,4)]
-    colnames(mod_res) = c('OR', 'pvalue')
+    colnames(mod_res) = c(effect_lab, 'pvalue')
 
     # Exponentiate the effect
     mod_res[,1] = exp(mod_res[,1])
@@ -72,7 +75,7 @@ pretty_mod = function(mod,
     mod_res$CI = format_cis(cis, digits = digits)
 
     # Reorder the results
-    mod_res = mod_res[,c('OR', 'CI', 'pvalue')]
+    mod_res = mod_res[,c(effect_lab, 'CI', 'pvalue')]
 
     # Save the p-values in case needed
     p = mod_res$pvalue
@@ -81,18 +84,18 @@ pretty_mod = function(mod,
     mod_res$pvalue = get_sci(mod_res$pvalue, digits = digits)
 
     # Format the ORs
-    ors = mod_res$OR
-    if(any(is_wholenumber(round(mod_res$OR, digits)))) {
-      whole = is_wholenumber(round(mod_res$OR, digits))
+    ors = mod_res[,effect_lab]
+    if(any(is_wholenumber(round(mod_res[,effect_lab], digits)))) {
+      whole = is_wholenumber(round(mod_res[,effect_lab], digits))
       ors[whole] = round(ors[whole])
       ors[whole] = stringr::str_pad(paste0(ors[whole], '.'),
                                     nchar(ors[whole]) + 1 + digits, 'right', '0')
-      ors[!whole] = stringr::str_pad(round(mod_res$OR[!whole], digits),
-                                    nchar(round(mod_res$OR[!whole])) + digits, 'right', '0')
-      mod_res$OR = ors
+      ors[!whole] = stringr::str_pad(round(mod_res[,effect_lab][!whole], digits),
+                                    nchar(round(mod_res[,effect_lab][!whole])) + digits, 'right', '0')
+      mod_res[,effect_lab] = ors
     } else {
-      mod_res$OR = stringr::str_pad(round(mod_res$OR, digits),
-                                    nchar(round(mod_res$OR)) + digits, 'right', '0')
+      mod_res[,effect_lab] = stringr::str_pad(round(mod_res[,effect_lab], digits),
+                                    nchar(round(mod_res[,effect_lab])) + digits, 'right', '0')
     }
 
     # If there is a flex table caption, create a flex table
@@ -103,7 +106,7 @@ pretty_mod = function(mod,
       mod_tbl$Variable = rownames(mod_tbl)
 
       # Reorder the results
-      mod_tbl = mod_tbl[,c('Variable', 'OR', 'CI', 'pvalue')]
+      mod_tbl = mod_tbl[,c('Variable', effect_lab, 'CI', 'pvalue')]
 
       # Create flex table
       mod_tbl = flextable::flextable(mod_tbl)
