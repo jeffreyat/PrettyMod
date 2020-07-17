@@ -32,21 +32,23 @@ format_cis = function(cis, digits = 2) {
   cis_temp = cis
 
   whole = is_wholenumber(round(cis[,1], digits))
-  cis_temp[whole,1] = round(cis[whole,1])
-  cis_temp[whole,1] = stringr::str_pad(paste0(cis_temp[whole,1], '.'),
-                                       nchar(cis_temp[whole,1]) + 1 + digits, 'right', '0')
-  cis_temp[!whole,1] = stringr::str_pad(round(cis[!whole,1], digits),
-                                        nchar(round(cis[!whole,1])) + 1 + digits, 'right', '0')
+  nas = is.na(cis[,1])
+  cis_temp[whole & !nas,1] = round(cis[whole & !nas,1])
+  cis_temp[whole & !nas,1] = stringr::str_pad(paste0(cis_temp[whole & !nas,1], '.'),
+                                       nchar(cis_temp[whole & !nas,1]) + 1 + digits, 'right', '0')
+  cis_temp[!whole & !nas,1] = stringr::str_pad(round(cis[!whole & !nas,1], digits),
+                                        nchar(round(cis[!whole & !nas,1])) + 1 + digits, 'right', '0')
   low = cis_temp[,1]
 
   cis_temp = cis
 
   whole = is_wholenumber(round(cis[,2], digits))
-  cis_temp[whole,2] = round(cis[whole,2])
-  cis_temp[whole,2] = stringr::str_pad(paste0(cis_temp[whole,2], '.'),
-                                       nchar(cis_temp[whole,2]) + 1 + digits, 'right', '0')
-  cis_temp[!whole,2] = stringr::str_pad(round(cis[!whole,2], digits),
-                                        nchar(round(cis[!whole,2])) + 1 + digits, 'right', '0')
+  nas = is.na(cis[,2])
+  cis_temp[whole & !nas,2] = round(cis[whole & !nas,2])
+  cis_temp[whole & !nas,2] = stringr::str_pad(paste0(cis_temp[whole & !nas,2], '.'),
+                                       nchar(cis_temp[whole & !nas,2]) + 1 + digits, 'right', '0')
+  cis_temp[!whole & !nas,2] = stringr::str_pad(round(cis[!whole & !nas,2], digits),
+                                        nchar(round(cis[!whole & !nas,2])) + 1 + digits, 'right', '0')
   high = cis_temp[,2]
 
   cis = paste0('[', low, ',', high, ']')
