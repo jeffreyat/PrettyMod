@@ -29,12 +29,29 @@ get_sci = function(num, digits = 2) {
 #' @export
 #'
 format_cis = function(cis, digits = 2) {
-  low = stringr::str_pad(round(cis[,1], digits),
-                nchar(round(cis[,1])) + digits, 'right', '0')
-  high = stringr::str_pad(round(cis[,2], digits),
-                 nchar(round(cis[,2])) + digits, 'right', '0')
+  cis_temp = cis
+
+  whole = is_wholenumber(round(cis[,1], digits))
+  cis_temp[whole,1] = round(cis[whole,1])
+  cis_temp[whole,1] = stringr::str_pad(paste0(cis_temp[whole,1], '.'),
+                                       nchar(cis_temp[whole,1]) + 1 + digits, 'right', '0')
+  cis_temp[!whole,1] = stringr::str_pad(round(cis[!whole,1], digits),
+                                        nchar(round(cis[!whole,1])) + 1 + digits, 'right', '0')
+  low = cis_temp[,1]
+
+  cis_temp = cis
+
+  whole = is_wholenumber(round(cis[,2], digits))
+  cis_temp[whole,2] = round(cis[whole,2])
+  cis_temp[whole,2] = stringr::str_pad(paste0(cis_temp[whole,2], '.'),
+                                       nchar(cis_temp[whole,2]) + 1 + digits, 'right', '0')
+  cis_temp[!whole,2] = stringr::str_pad(round(cis[!whole,2], digits),
+                                        nchar(round(cis[!whole,2])) + 1 + digits, 'right', '0')
+  high = cis_temp[,2]
+
   cis = paste0('[', low, ',', high, ']')
   return(cis)
+
 }
 
 #' Pretty format results from models
@@ -91,11 +108,11 @@ pretty_mod = function(mod,
       ors[whole] = stringr::str_pad(paste0(ors[whole], '.'),
                                     nchar(ors[whole]) + 1 + digits, 'right', '0')
       ors[!whole] = stringr::str_pad(round(mod_res[,effect_lab][!whole], digits),
-                                    nchar(round(mod_res[,effect_lab][!whole])) + digits, 'right', '0')
+                                    nchar(round(mod_res[,effect_lab][!whole])) + 1 + digits, 'right', '0')
       mod_res[,effect_lab] = ors
     } else {
       mod_res[,effect_lab] = stringr::str_pad(round(mod_res[,effect_lab], digits),
-                                    nchar(round(mod_res[,effect_lab])) + digits, 'right', '0')
+                                    nchar(round(mod_res[,effect_lab])) + 1 + digits, 'right', '0')
     }
 
     # If there is a flex table caption, create a flex table
