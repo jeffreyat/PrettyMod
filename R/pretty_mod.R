@@ -54,7 +54,7 @@ pretty_mod = function(mod,
 
   if(type == 'binomial' || type == 'negbin') {
     # Depending on model type, set effect label
-    effect_lab = ifelse(type == 'binomial', 'OR', 'DeltaCount')
+    effect_lab = ifelse(type == 'binomial', 'OR', 'Estimate')
 
     # Put coefficients from model in data.frame
     mod_res = data.frame(summary(mod)$coefficients)
