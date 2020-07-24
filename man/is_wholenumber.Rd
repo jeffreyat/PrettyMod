@@ -11,6 +11,9 @@ is_wholenumber(num, tol = .Machine$double.eps^0.5)
 
 \item{tol}{(numeric): how close the number needs to be to whole}
 }
+\value{
+(boolean): is the number whole?
+}
 \description{
-Returns whether a number is whole
+Checks if a number is whole
 }

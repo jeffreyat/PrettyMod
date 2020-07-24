@@ -11,6 +11,9 @@ get_sci(num, digits = 2)
 
 \item{digits}{(integer): precision of result}
 }
+\value{
+(character): number in scientific notation
+}
 \description{
-Returns a string version of number in scientific notation.
+Convert number to scientific notation
 }

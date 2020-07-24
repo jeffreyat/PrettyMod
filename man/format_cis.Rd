@@ -11,6 +11,9 @@ format_cis(cis, digits = 2)
 
 \item{digits}{(integer): precision of result}
 }
+\value{
+(vector): strings with formatted confidence intevals
+}
 \description{
-Returns vector of strings with formatted confidence intervals
+Format confidence intervals
 }

@@ -1,7 +1,6 @@
 #' Checks if a number is whole
 #'
-#' Returns whether a number is whole
-#'
+#' @return (boolean): is the number whole?
 #' @param num (numeric): number to check
 #' @param tol (numeric): how close the number needs to be to whole
 #' @export
@@ -10,8 +9,7 @@ is_wholenumber <- function(num, tol = .Machine$double.eps^0.5)  abs(num - round(
 
 #' Convert number to scientific notation
 #'
-#' Returns a string version of number in scientific notation.
-#'
+#' @return (character): number in scientific notation
 #' @param num (numeric): number to convert
 #' @param digits (integer): precision of result
 #' @export
@@ -22,8 +20,7 @@ get_sci = function(num, digits = 2) {
 
 #' Format number
 #'
-#' Returns vector of strings with numbers formatted to be fixed width
-#'
+#' @return (vector): strings of fixed width formatted numbers
 #' @param num (vector): vectors of numbers to format
 #' @param digits (integer): precision of result
 #' @export
@@ -46,8 +43,7 @@ format_num = function(num, digits = 2) {
 
 #' Format confidence intervals
 #'
-#' Returns vector of strings with formatted confidence intervals
-#'
+#' @return (vector): strings with formatted confidence intevals
 #' @param cis (data.frame): CIs with low in first column high in second
 #' @param digits (integer): precision of result
 #' @export
@@ -62,9 +58,8 @@ format_cis = function(cis, digits = 2) {
 
 #' Pretty format results from models
 #'
-#' Returns list with data.frame or data.frame and flextable
-#'
-#' @param mod: a model object
+#' @return (list): data.frame of results or df and flextable
+#' @param mod (object): a model object
 #' @param type (character): the type of model
 #' @param digits (integer): precision of result
 #' @param flex_caption (character): caption for flex table
@@ -73,7 +68,8 @@ format_cis = function(cis, digits = 2) {
 pretty_mod = function(mod,
                       type = 'binomial',
                       digits = 2,
-                      flex_caption = NULL) {
+                      flex_caption = NULL,
+                      expo = TRUE) {
 
   if(type == 'binomial' || type == 'negbin') {
     # Depending on model type, set effect label
@@ -87,11 +83,16 @@ pretty_mod = function(mod,
     mod_res = mod_res[-1,c(1,4)]
     colnames(mod_res) = c(effect_lab, 'pvalue')
 
-    # Exponentiate the effect
-    mod_res[,1] = exp(mod_res[,1])
+    if(expo) {
+      # Exponentiate the effect
+      mod_res[,1] = exp(mod_res[,1])
 
-    # Retrieve confidence intervals
-    cis = data.frame(exp(confint(mod)))
+      # Retrieve confidence intervals
+      cis = data.frame(exp(confint(mod)))
+    } else {
+      cis = data.frame(confint(mod))
+    }
+
     cis = cis[-1,] # ditch the intercept
 
     # Convert CIs to string and add to results

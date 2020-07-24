@@ -4,17 +4,26 @@
 \alias{pretty_mod}
 \title{Pretty format results from models}
 \usage{
-pretty_mod(mod, type = "binomial", digits = 2, flex_caption = NULL)
+pretty_mod(
+  mod,
+  type = "binomial",
+  digits = 2,
+  flex_caption = NULL,
+  expo = TRUE
+)
 }
 \arguments{
+\item{mod}{(object): a model object}
+
 \item{type}{(character): the type of model}
 
 \item{digits}{(integer): precision of result}
 
 \item{flex_caption}{(character): caption for flex table}
-
-\item{mod:}{a model object}
+}
+\value{
+(list): data.frame of results or df and flextable
 }
 \description{
-Returns list with data.frame or data.frame and flextable
+Pretty format results from models
 }
