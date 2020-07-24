@@ -73,7 +73,13 @@ pretty_mod = function(mod,
 
   if(type == 'binomial' || type == 'negbin') {
     # Depending on model type, set effect label
-    effect_lab = ifelse(type == 'binomial', 'OR', 'Estimate')
+    if(type == 'negbin') {
+      effect_lab = 'Estimate'
+    } else if(type == 'binomial' & expo) {
+      effect_lab = 'OR'
+    } else {
+      effect_lab = 'ln(OR)'
+    }
 
     # Put coefficients from model in data.frame
     mod_res = data.frame(summary(mod)$coefficients)
