@@ -93,7 +93,7 @@ pretty_mod = function(mod,
     if(type != 'surv') {
       mod_res = mod_res[-1,c(1,4)]
     } else {
-      mod_res = mod_res[,c(1,4)]
+      mod_res = mod_res[,c(1,5)]
     }
 
     colnames(mod_res) = c(effect_lab, 'pvalue')
