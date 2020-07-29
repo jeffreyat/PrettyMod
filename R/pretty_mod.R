@@ -71,14 +71,18 @@ pretty_mod = function(mod,
                       flex_caption = NULL,
                       expo = TRUE) {
 
-  if(type == 'binomial' || type == 'negbin') {
+  if(type %in% c('binomial', 'negbin', 'surv')) {
     # Depending on model type, set effect label
     if(type == 'negbin') {
       effect_lab = 'Estimate'
     } else if(type == 'binomial' & expo) {
       effect_lab = 'OR'
-    } else {
+    } else if(type == 'binomial'){
       effect_lab = 'ln(OR)'
+    } else if(type == 'surv' & expo) {
+      effect_lab = 'HR'
+    } else if(type == 'surv') {
+      effect_lab = 'ln(HR)'
     }
 
     # Put coefficients from model in data.frame
@@ -86,7 +90,12 @@ pretty_mod = function(mod,
 
     # We just need the estimate of the effect and the p-value for each
     # variable, ditching the intercept
-    mod_res = mod_res[-1,c(1,4)]
+    if(type != 'surv') {
+      mod_res = mod_res[-1,c(1,4)]
+    } else {
+      mod_res = mod_res[,c(1,4)]
+    }
+
     colnames(mod_res) = c(effect_lab, 'pvalue')
 
     if(expo) {
@@ -99,7 +108,10 @@ pretty_mod = function(mod,
       cis = data.frame(confint(mod))
     }
 
-    cis = cis[-1,] # ditch the intercept
+    # ditch the intercept
+    if(type != 'surv') {
+      cis = cis[-1,]
+    }
 
     # Convert CIs to string and add to results
     mod_res$CI = format_cis(cis, digits = digits)
