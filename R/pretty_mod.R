@@ -175,7 +175,7 @@ pretty_mod = function(mod,
     mod_res$pvalue = get_sci(mod_res$pvalue, digits = digits)
 
     # Format the estimates
-    mod_res$Estimate = format_num(mod_res$Estimate, digitis = digits)
+    mod_res$Estimate = format_num(mod_res$Estimate, digits = digits)
 
     # If there is a flex table caption, create a flex table
     if(!is.null(flex_caption)) {
