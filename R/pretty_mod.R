@@ -113,7 +113,7 @@ pretty_mod = function(mod,
     }
 
     # ditch the intercept
-    if(type != 'surv') {
+    if(!type %in% c('surv', 'ordinal')) {
       cis = cis[-1,]
     }
 
