@@ -93,7 +93,7 @@ pretty_mod = function(mod,
     # We just need the estimate of the effect and the p-value for each
     # variable, ditching the intercept
     if(type == 'ordinal') {
-      mod_res = mod_res[-1:skip, c(1,4)]
+      mod_res = mod_res[-c(1:skip), c(1,4)]
     } else if(type != 'surv') {
       mod_res = mod_res[-1,c(1,4)]
     } else {
