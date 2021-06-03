@@ -73,7 +73,7 @@ pretty_mod = function(mod,
                       expo = TRUE,
                       skip = 1) {
 
-  if(type %in% c('binomial', 'negbin', 'surv')) {
+  if(type %in% c('binomial', 'negbin', 'surv', 'ordinal')) {
     # Depending on model type, set effect label
     if(type == 'negbin') {
       effect_lab = 'Estimate'
