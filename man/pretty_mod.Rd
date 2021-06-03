@@ -9,17 +9,20 @@ pretty_mod(
   type = "binomial",
   digits = 2,
   flex_caption = NULL,
-  expo = TRUE
+  expo = TRUE,
+  skip = 1
 )
 }
 \arguments{
 \item{mod}{(object): a model object}
 
-\item{type}{(character): the type of model}
+\item{type}{(character): the type of model (i.e. 'binomial', 'negbin', 'surv', 'ordinal', 'lm')}
 
 \item{digits}{(integer): precision of result}
 
 \item{flex_caption}{(character): caption for flex table}
+
+\item{expo}{(Boolean): take exponential function of estimate}
 }
 \value{
 (list): data.frame of results or df and flextable

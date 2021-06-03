@@ -60,24 +60,26 @@ format_cis = function(cis, digits = 2) {
 #'
 #' @return (list): data.frame of results or df and flextable
 #' @param mod (object): a model object
-#' @param type (character): the type of model
+#' @param type (character): the type of model (i.e. 'binomial', 'negbin', 'surv', 'ordinal', 'lm')
 #' @param digits (integer): precision of result
 #' @param flex_caption (character): caption for flex table
+#' @param expo (Boolean): take exponential function of estimate
 #' @export
 #'
 pretty_mod = function(mod,
                       type = 'binomial',
                       digits = 2,
                       flex_caption = NULL,
-                      expo = TRUE) {
+                      expo = TRUE,
+                      skip = 1) {
 
   if(type %in% c('binomial', 'negbin', 'surv')) {
     # Depending on model type, set effect label
     if(type == 'negbin') {
       effect_lab = 'Estimate'
-    } else if(type == 'binomial' & expo) {
+    } else if(type == 'binomial' & expo | type == 'ordinal' & expo) {
       effect_lab = 'OR'
-    } else if(type == 'binomial'){
+    } else if(type == 'binomial' | type == 'ordinal'){
       effect_lab = 'ln(OR)'
     } else if(type == 'surv' & expo) {
       effect_lab = 'HR'
@@ -90,7 +92,9 @@ pretty_mod = function(mod,
 
     # We just need the estimate of the effect and the p-value for each
     # variable, ditching the intercept
-    if(type != 'surv') {
+    if(type == 'ordinal') {
+      mod_res = mod_res[-1:skip, c(1,4)]
+    } else if(type != 'surv') {
       mod_res = mod_res[-1,c(1,4)]
     } else {
       mod_res = mod_res[,c(1,5)]
